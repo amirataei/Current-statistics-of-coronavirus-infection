@@ -1,23 +1,32 @@
-import logo from './logo.svg';
+import Cards from "./components/Cards/cards";
+import CountryPicker from "./components/CountryPicker/CountryPicker";
+import Chart from "./components/Chart/Chart";
+import { fetchData } from "./Api";
+import { useEffect, useState } from "react";
 import './App.css';
-
+import coronaimage from '../src/coronaimage.png'
 function App() {
+  const [data, setData] = useState({});
+  const [Country, setCountry] = useState('');
+  useEffect(async () => {
+    const fatchData = await fetchData();
+    setData(fatchData)
+
+ 
+  } ,[]);
+
+ const  handleCountryChange = async (Country) => {
+  const fatchData = await fetchData(Country);
+  setData(fatchData)
+  setCountry(Country)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="Container">
+      <img className="image" src={coronaimage} />
+      <Cards data={data}/>
+      <CountryPicker handleCountryChange={handleCountryChange}/>
+      <Chart data={data} Country={Country}/>
     </div>
   );
 }
